@@ -2,7 +2,6 @@ package core.mvc;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +15,6 @@ import org.slf4j.LoggerFactory;
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = LoggerFactory.getLogger(FrontController.class);
-	
-	private static final String DEFAULT_REDIRECT_PREFIX = "redirect:";
-	private static final String DEFAULT_API_PREFIX = "api";
 	
 	private RequestMapping rm;
 
@@ -45,21 +41,6 @@ public class FrontController extends HttpServlet {
 		}
 	}
 
-	void movePage(HttpServletRequest req, HttpServletResponse resp,
-			String viewName) throws ServletException, IOException {
-		if (viewName.startsWith(DEFAULT_API_PREFIX)) {
-			return;
-		}
-		
-		if (viewName.startsWith(DEFAULT_REDIRECT_PREFIX)) {
-			resp.sendRedirect(viewName.substring(DEFAULT_REDIRECT_PREFIX.length()));
-			return;
-		}
-		
-		RequestDispatcher rd = req.getRequestDispatcher(viewName);
-		rd.forward(req, resp);
-	}
-	
 	String urlExceptParameter(String forwardUrl) {
 		int index = forwardUrl.indexOf("?");
 		if (index > 0) {
