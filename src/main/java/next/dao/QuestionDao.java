@@ -14,7 +14,7 @@ public class QuestionDao {
 	public void insert(Question question) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		String sql = "INSERT INTO QUESTIONS (writer, title, contents, createdDate, countOfComment) VALUES (?, ?, ?, ?, ?)";
-		jdbcTemplate.executeUpdate(sql, 
+		jdbcTemplate.update(sql, 
 				question.getWriter(), 
 				question.getTitle(), 
 				question.getContents(),
@@ -38,7 +38,7 @@ public class QuestionDao {
 			
 		};
 		
-		return jdbcTemplate.list(sql, rm);
+		return jdbcTemplate.query(sql, rm);
 	}
 
 	public Question findById(long questionId) {
@@ -58,6 +58,6 @@ public class QuestionDao {
 			
 		};
 		
-		return jdbcTemplate.executeQuery(sql, rm, questionId);
+		return jdbcTemplate.queryForObject(sql, rm, questionId);
 	}
 }

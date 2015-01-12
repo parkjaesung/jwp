@@ -14,7 +14,7 @@ public class AnswerDao {
 	public void insert(Answer answer) {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate();
 		String sql = "INSERT INTO ANSWERS (writer, contents, createdDate, questionId) VALUES (?, ?, ?, ?)";
-		jdbcTemplate.executeUpdate(sql, answer.getWriter(),
+		jdbcTemplate.update(sql, answer.getWriter(),
 				answer.getContents(),
 				new Timestamp(answer.getTimeFromCreateDate()),
 				answer.getQuestionId());
@@ -37,6 +37,6 @@ public class AnswerDao {
 			}
 		};
 		
-		return jdbcTemplate.list(sql, rm, questionId);
+		return jdbcTemplate.query(sql, rm, questionId);
 	}
 }
