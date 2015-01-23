@@ -38,8 +38,8 @@ public class JdbcTemplate {
 		ResultSet rs = null;
 		try (Connection conn = ConnectionManager.getConnection(); 
 			PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			rs = pstmt.executeQuery();
 			pss.setParameters(pstmt);
+			rs = pstmt.executeQuery();
 
 			List<T> list = new ArrayList<T>();
 			while (rs.next()) {
