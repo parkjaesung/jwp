@@ -16,7 +16,7 @@ function writeAnswers(e) {
 	 
 	 request.onreadystatechange = function() {
 		 if(request.readyState == 4 && request.status == 200) {
-			 location.reload(true);
+			 // @TODO 댓글 html element가 동적으로 추가되도록 한다.
 		 }
 	 }
 	 
