@@ -9,28 +9,12 @@ import java.util.List;
 
 public class JdbcTemplate {
 	public void update(String sql, PreparedStatementSetter pss) throws DataAccessException {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		try {
-			conn = ConnectionManager.getConnection();
-			pstmt = conn.prepareStatement(sql);
+		try (Connection conn = ConnectionManager.getConnection(); 
+			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pss.setParameters(pstmt);
-
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			throw new DataAccessException(e);
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				throw new DataAccessException(e);
-			}
 		}
 	}
 
@@ -51,15 +35,11 @@ public class JdbcTemplate {
 	}
 
 	public <T> List<T> query(String sql, RowMapper<T> rm, PreparedStatementSetter pss) throws DataAccessException {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		try {
-			conn = ConnectionManager.getConnection();
-			pstmt = conn.prepareStatement(sql);
-			pss.setParameters(pstmt);
-
+		try (Connection conn = ConnectionManager.getConnection(); 
+			PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			rs = pstmt.executeQuery();
+			pss.setParameters(pstmt);
 
 			List<T> list = new ArrayList<T>();
 			while (rs.next()) {
@@ -72,14 +52,6 @@ public class JdbcTemplate {
 			try {
 				if (rs != null) {
 					rs.close();
-				}
-
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-				if (conn != null) {
-					conn.close();
 				}
 			} catch (SQLException e) {
 				throw new DataAccessException(e);
